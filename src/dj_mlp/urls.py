@@ -21,7 +21,6 @@ from django.views.generic import RedirectView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('performance/', include('products.urls', namespace='products')),
     path('upload/', include('import_csv.urls', namespace='import_csv')),
     path('', RedirectView.as_view(url='/upload/')),
 ]
