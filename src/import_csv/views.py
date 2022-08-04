@@ -9,26 +9,28 @@ from django.contrib.auth.models import User
 def import_file_view(request):
     error_message = None
     success_message = None
-    form = CsvForm(request.POST or None, request.FILES or None)
 
-    if form.is_valid():
-        form.save()
+    if request.method == "POST":
+        form = CsvForm(request.POST, request.FILES)
+        if form.is_valid():
+            obj = form.save()
+
+            try:
+                with open(obj.file_name.path, 'r') as f:
+                    reader = csv.reader(f)
+                    for row in reader:
+                        movie, _ = Movie.objects.get_or_create(movie_id=row[0], movie_name=row[1])
+                        # user = User.objects.get(id=row[2])
+
+                obj.success = True
+                obj.save()
+
+                success_message = "File uploaded successfully"
+            except Exception as exc:
+                error_message = "Oops.. something went wrong: " + str(exc)
+
+    else:
         form = CsvForm()
-
-        try:
-            obj = Csv.objects.get(activated=False)
-
-            with open(obj.file_name.path, 'r') as f:
-                reader = csv.reader(f)
-                for row in reader:
-                    user = User.objects.get(id=row[2])
-                    movie, _ = Movie.objects.get_or_create(movie_id=row[0], movie_name=row[1])
-
-            obj.activated = True
-            obj.save()
-            success_message = "File uploaded successfully"
-        except:
-            error_message = "Oops.. something went wrong!"
 
     context = {
         'form': form,
