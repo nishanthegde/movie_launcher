@@ -20,7 +20,6 @@ def import_file_view(request):
                     reader = csv.reader(f)
                     for row in reader:
                         movie, _ = Movie.objects.get_or_create(movie_id=row[0], movie_name=row[1])
-                        # user = User.objects.get(id=row[2])
 
                 obj.success = True
                 obj.save()
