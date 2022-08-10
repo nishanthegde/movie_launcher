@@ -12,6 +12,7 @@ def import_file_view(request):
 
     if request.method == "POST":
         form = CsvForm(request.POST, request.FILES)
+
         if form.is_valid():
             obj = form.save()
 
@@ -25,6 +26,7 @@ def import_file_view(request):
                 obj.save()
 
                 success_message = "File uploaded successfully"
+
             except Exception as exc:
                 error_message = "Oops.. something went wrong: " + str(exc)
 
