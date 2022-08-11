@@ -18,4 +18,4 @@ class Movie(models.Model):
     date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Move name: {self.movie_name}"
+        return f"Movie name: {self.movie_name}"

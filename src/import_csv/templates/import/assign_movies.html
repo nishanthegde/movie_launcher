@@ -1,0 +1,11 @@
+
+{% for movie in movies %}
+<div>
+    {{movie}} 
+<form action = "" method = "post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Assign">
+</form>
+</div>
+{% endfor %}
