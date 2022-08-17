@@ -2,7 +2,6 @@ from django import forms
 from .models import Csv
 from django.contrib.auth.models import User
 
-
 class CsvForm(forms.ModelForm):
     class Meta:
         model = Csv
@@ -10,4 +9,4 @@ class CsvForm(forms.ModelForm):
 
 
 class UserForm(forms.Form):
-    user = forms.ModelChoiceField(queryset=User.objects.all(), initial=0)
+    user = forms.ModelChoiceField(queryset=User.objects.all())

@@ -1,4 +1,6 @@
 $(document).ready(function () {
+     $('#movie_user_table').DataTable()
+
     $('.ui.dropdown')
         .dropdown()
 

@@ -41,21 +41,24 @@ def import_file_view(request):
     return render(request, 'import/upload.html', context)
 
 
-def assign_movies(request):
+def assign_movies_view(request):
     movies = Movie.objects.all()
-    form = UserForm
-
-    if request.method == "POST":
-        form = UserForm(request.POST, request.user)
-
-        movie = Movie.objects.get(1)
-        movie.user = form.user
-        movie.save()
-
-
-
+    # form = UserForm
+    #
+    # if request.method == "POST":
+    #     form = UserForm(request.POST, request.user)
+    #
+    #     movie = Movie.objects.get(1)
+    #     movie.user = form.user
+    #     movie.save()
+    #
+    #
+    #
+    # context = {
+    #     'movies': movies,
+    #     'form': form
+    # }
     context = {
         'movies': movies,
-        'form': form
     }
     return render(request, 'import/assign_movies.html', context)
