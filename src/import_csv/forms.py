@@ -1,5 +1,5 @@
 from django import forms
-from .models import Csv
+from .models import Csv, Movie
 from django.contrib.auth.models import User
 
 class CsvForm(forms.ModelForm):
@@ -8,5 +8,7 @@ class CsvForm(forms.ModelForm):
         fields = ('file_name',)
 
 
-class UserForm(forms.Form):
-    user = forms.ModelChoiceField(queryset=User.objects.all())
+class AssignMovieForm(forms.ModelForm):
+    class Meta:
+        model = Movie
+        fields = ("movie_id", "movie_name", "movie_user")
