@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .forms import CsvForm
+from .forms import CsvForm, UserForm
 from .models import Csv, Movie
 import csv
 from django.contrib.auth.models import User
@@ -12,6 +12,7 @@ def import_file_view(request):
 
     if request.method == "POST":
         form = CsvForm(request.POST, request.FILES)
+
         if form.is_valid():
             obj = form.save()
 
@@ -20,12 +21,12 @@ def import_file_view(request):
                     reader = csv.reader(f)
                     for row in reader:
                         movie, _ = Movie.objects.get_or_create(movie_id=row[0], movie_name=row[1])
-                        # user = User.objects.get(id=row[2])
 
                 obj.success = True
                 obj.save()
 
                 success_message = "File uploaded successfully"
+
             except Exception as exc:
                 error_message = "Oops.. something went wrong: " + str(exc)
 
@@ -38,3 +39,26 @@ def import_file_view(request):
         'error_message': error_message
     }
     return render(request, 'import/upload.html', context)
+
+
+def assign_movies_view(request):
+    movies = Movie.objects.all()
+    # form = UserForm
+    #
+    # if request.method == "POST":
+    #     form = UserForm(request.POST, request.user)
+    #
+    #     movie = Movie.objects.get(1)
+    #     movie.user = form.user
+    #     movie.save()
+    #
+    #
+    #
+    # context = {
+    #     'movies': movies,
+    #     'form': form
+    # }
+    context = {
+        'movies': movies,
+    }
+    return render(request, 'import/assign_movies.html', context)
