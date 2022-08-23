@@ -4,23 +4,32 @@
 
 {% block content %}
     <h1>Assign Users To Movies</h1>
-    <table id="movie_user_table" class="ui celled table" style="width:100%">
-      <thead>
-        <tr>
-            <th class="single line">Movie ID</th>
-            <th class="single line">Movie Name</th>
-            <th class="single line">Assigned User</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for movie in movies %}
-        <tr>
-            <td class="single line">{{ movie.movie_id }}</td>
-            <td class="single line">{{ movie.movie_name }}</td>
-            <td class="single line">{{ movie.movie_user }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    <form method="post">
+        {% csrf_token %}
+        {{ formset.management_form }}
+        <table id="movie_user_table" class="ui celled table" style="width:100%">
+          <thead>
+            <tr>
+                <th class="single line">Movie ID</th>
+                <th class="single line">Movie Name</th>
+                <th class="single line">Assigned User</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for form in formset %}
+                {% if form.instance.movie_id %}
+                    <tr>
+                        {{ form.movie_id.as_hidden }}
+                        {{ form.movie_name.as_hidden }}
+                        <td>{{ form.instance.movie_id }}</td>
+                        <td>{{ form.instance.movie_name }}</td>
+                        <td>{{ form.movie_user }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+          </tbody>
+        </table>
+        <button type="submit" class="ui positive button">Assign Users</button>
+    </form>
 
 {% endblock %}

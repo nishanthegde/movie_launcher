@@ -1,8 +1,9 @@
 from django.shortcuts import render
-from .forms import CsvForm, UserForm
-from .models import Csv, Movie
+from .forms import CsvForm, AssignMovieForm
+from .models import Movie
 import csv
 from django.contrib.auth.models import User
+from django.forms import modelformset_factory
 
 
 # Create your views here.
@@ -42,23 +43,23 @@ def import_file_view(request):
 
 
 def assign_movies_view(request):
-    movies = Movie.objects.all()
-    # form = UserForm
-    #
-    # if request.method == "POST":
-    #     form = UserForm(request.POST, request.user)
-    #
-    #     movie = Movie.objects.get(1)
-    #     movie.user = form.user
-    #     movie.save()
-    #
-    #
-    #
-    # context = {
-    #     'movies': movies,
-    #     'form': form
-    # }
+    AssignMovieFormSet = modelformset_factory(Movie, form=AssignMovieForm)
+
+    if request.method == 'POST':
+        formset = AssignMovieFormSet(request.POST)
+        formset.clean()
+        for form in formset:
+            movie_id = form.cleaned_data.get("movie_id", None)
+            movie_user = form.cleaned_data.get("movie_user", None)
+
+            if form.has_changed():
+                movie = Movie.objects.get(movie_id=movie_id)
+                movie.movie_user = movie_user
+                movie.save()
+    else:
+        formset = AssignMovieFormSet()
+
     context = {
-        'movies': movies,
+        'formset': formset,
     }
     return render(request, 'import/assign_movies.html', context)
