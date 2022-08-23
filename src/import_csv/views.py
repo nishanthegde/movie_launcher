@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from .forms import CsvForm, AssignMovieForm
-from .models import Csv, Movie
+from .models import Movie
 import csv
 from django.contrib.auth.models import User
 from django.forms import modelformset_factory
+
 
 # Create your views here.
 def import_file_view(request):
@@ -50,7 +51,8 @@ def assign_movies_view(request):
         for form in formset:
             movie_id = form.cleaned_data.get("movie_id", None)
             movie_user = form.cleaned_data.get("movie_user", None)
-            if movie_id and movie_user:
+
+            if form.has_changed():
                 movie = Movie.objects.get(movie_id=movie_id)
                 movie.movie_user = movie_user
                 movie.save()

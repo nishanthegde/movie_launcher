@@ -14,7 +14,9 @@ class Csv(models.Model):
 class Movie(models.Model):
     movie_id = models.CharField(max_length=100)
     movie_name = models.TextField()
-    movie_user = models.ForeignKey(User, null=True, blank=True, default = None, on_delete=models.SET_NULL)
+    movie_user = models.ForeignKey(
+        User, null=True, blank=True, default=None, on_delete=models.SET_NULL
+    )
     date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
