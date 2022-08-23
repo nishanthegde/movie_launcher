@@ -6,4 +6,4 @@ bin
 lib
 share
 static_cdn/media_root/*.csv
-
+.pyc
