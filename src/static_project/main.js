@@ -14,6 +14,7 @@ $(document).ready(function () {
             $(this)
                 .closest('.message')
                 .transition('fade')
+            location.href="./assign_movies"
             ;
         })
     ;
