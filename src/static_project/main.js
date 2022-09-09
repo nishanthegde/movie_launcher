@@ -1,21 +1,28 @@
 $(document).ready(function () {
-     $('#movie_user_table').DataTable()
+    var table = $('#movie_user_table');
+    var tableOptions = {
+        'bPaginate': false
+    };
+    table.DataTable(tableOptions);
 
     $('.ui.dropdown')
         .dropdown()
+    ;
 
     $('.message .close')
         .on('click', function () {
             $(this)
                 .closest('.message')
                 .transition('fade')
+            location.href="./assign_movies"
             ;
         })
+    ;
 
-    $('#modal-btn').click(function(){
+    $('#modal-btn').click(function () {
         $('.ui.modal')
-        .modal('show')
+            .modal('show')
         ;
     })
-;
+    ;
 })

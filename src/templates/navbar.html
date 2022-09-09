@@ -1,5 +1,6 @@
 {% url 'import_csv:upload-view' as path_to_upload %}
 {% url 'import_csv:assign-movies' as path_to_assign_movies %}
+{% url 'import_csv:assign-movies' as path_to_assign_movies %}
 
 <div class="ui secondary pointing menu">
   <a href= {{path_to_upload}}  class="{% if request.path == path_to_upload%}active{% endif %} item">
@@ -8,5 +9,7 @@
   <a href= {{path_to_assign_movies}} class="{% if request.path == path_to_assign_movies%}active{% endif %} item">
     Assign Users
   </a>
+  <a href= "{% url 'admin:index' %}" class="item" target ="_blank">
+    Site Admin
+  </a>
 </div>
-

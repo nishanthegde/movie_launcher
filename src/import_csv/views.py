@@ -20,16 +20,23 @@ def import_file_view(request):
             try:
                 with open(obj.file_name.path, 'r') as f:
                     reader = csv.reader(f)
+                    row_cnt = 0
                     for row in reader:
                         movie, _ = Movie.objects.get_or_create(movie_id=row[0], movie_name=row[1])
+                        row_cnt += 1
 
                 obj.success = True
                 obj.save()
 
-                success_message = "File uploaded successfully"
+                if row_cnt > 1:
+                    tag = "rows"
+                else:
+                    tag = "row"
+
+                success_message = f"File uploaded successfully: {row_cnt} {tag} imported"
 
             except Exception as exc:
-                error_message = "Oops.. something went wrong: " + str(exc)
+                error_message = f"File import error: {str(exc)}"
 
     else:
         form = CsvForm()
@@ -43,23 +50,31 @@ def import_file_view(request):
 
 
 def assign_movies_view(request):
+    error_message = None
     AssignMovieFormSet = modelformset_factory(Movie, form=AssignMovieForm)
 
-    if request.method == 'POST':
-        formset = AssignMovieFormSet(request.POST)
-        formset.clean()
-        for form in formset:
-            movie_id = form.cleaned_data.get("movie_id", None)
-            movie_user = form.cleaned_data.get("movie_user", None)
+    formset = None
 
-            if form.has_changed():
-                movie = Movie.objects.get(movie_id=movie_id)
-                movie.movie_user = movie_user
-                movie.save()
+    if request.method == 'POST':
+
+        if Movie.objects.count() == 0:
+            error_message = f"Import movies first!"
+        else:
+            formset = AssignMovieFormSet(request.POST)
+            formset.clean()
+            for form in formset:
+                movie_id = form.cleaned_data.get("movie_id", None)
+                movie_user = form.cleaned_data.get("movie_user", None)
+
+                if form.has_changed():
+                    movie = Movie.objects.get(movie_id=movie_id)
+                    movie.movie_user = movie_user
+                    movie.save()
     else:
         formset = AssignMovieFormSet()
 
     context = {
         'formset': formset,
+        'error_message': error_message
     }
     return render(request, 'import/assign_movies.html', context)
