@@ -53,20 +53,23 @@ def assign_movies_view(request):
     error_message = None
     AssignMovieFormSet = modelformset_factory(Movie, form=AssignMovieForm)
 
-    # if Movie.objects.count() == 0:
-    #     error_message = f"Import movies first!"
+    formset = None
 
     if request.method == 'POST':
-        formset = AssignMovieFormSet(request.POST)
-        formset.clean()
-        for form in formset:
-            movie_id = form.cleaned_data.get("movie_id", None)
-            movie_user = form.cleaned_data.get("movie_user", None)
 
-            if form.has_changed():
-                movie = Movie.objects.get(movie_id=movie_id)
-                movie.movie_user = movie_user
-                movie.save()
+        if Movie.objects.count() == 0:
+            error_message = f"Import movies first!"
+        else:
+            formset = AssignMovieFormSet(request.POST)
+            formset.clean()
+            for form in formset:
+                movie_id = form.cleaned_data.get("movie_id", None)
+                movie_user = form.cleaned_data.get("movie_user", None)
+
+                if form.has_changed():
+                    movie = Movie.objects.get(movie_id=movie_id)
+                    movie.movie_user = movie_user
+                    movie.save()
     else:
         formset = AssignMovieFormSet()
 
