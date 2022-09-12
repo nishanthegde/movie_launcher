@@ -11,6 +11,7 @@
             </div>
         </div>
     {% endif %}
+
     <h1>Assign Users To Movies</h1>
     <form method="post">
         {% csrf_token %}
@@ -37,7 +38,8 @@
             {% endfor %}
           </tbody>
         </table>
-        <button type="submit" class="ui positive button">Assign Users</button>
+        <button name = "reset" type="submit" class="ui positive button">Reset Assignment</button>
+        <button name = "assign" type="submit" class="ui positive button">Assign Users</button>
     </form>
 
 {% endblock %}

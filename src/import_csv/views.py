@@ -49,10 +49,17 @@ def import_file_view(request):
     return render(request, 'import/upload.html', context)
 
 
+def reset_movies():
+    movies = Movie.objects.all()
+
+    for movie in movies:
+        movie.movie_user = None
+        movie.save()
+
+
 def assign_movies_view(request):
     error_message = None
     AssignMovieFormSet = modelformset_factory(Movie, form=AssignMovieForm)
-
     formset = None
 
     if request.method == 'POST':
@@ -60,16 +67,20 @@ def assign_movies_view(request):
         if Movie.objects.count() == 0:
             error_message = f"Import movies first!"
         else:
-            formset = AssignMovieFormSet(request.POST)
-            formset.clean()
-            for form in formset:
-                movie_id = form.cleaned_data.get("movie_id", None)
-                movie_user = form.cleaned_data.get("movie_user", None)
+            if "assign" in request.POST:
+                formset = AssignMovieFormSet(request.POST)
+                formset.clean()
+                for form in formset:
+                    movie_id = form.cleaned_data.get("movie_id", None)
+                    movie_user = form.cleaned_data.get("movie_user", None)
 
-                if form.has_changed():
-                    movie = Movie.objects.get(movie_id=movie_id)
-                    movie.movie_user = movie_user
-                    movie.save()
+                    if form.has_changed():
+                        movie = Movie.objects.get(movie_id=movie_id)
+                        movie.movie_user = movie_user
+                        movie.save()
+            else:
+                reset_movies()
+                formset = AssignMovieFormSet()
     else:
         formset = AssignMovieFormSet()
 
