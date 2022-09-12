@@ -48,6 +48,7 @@ def import_file_view(request):
     }
     return render(request, 'import/upload.html', context)
 
+
 def reset_movies():
     movies = Movie.objects.all()
 
@@ -63,11 +64,10 @@ def assign_movies_view(request):
 
     if request.method == 'POST':
 
-        if "assign" in request.POST:
-            print('assign')
-            if Movie.objects.count() == 0:
-                error_message = f"Import movies first!"
-            else:
+        if Movie.objects.count() == 0:
+            error_message = f"Import movies first!"
+        else:
+            if "assign" in request.POST:
                 formset = AssignMovieFormSet(request.POST)
                 formset.clean()
                 for form in formset:
@@ -78,10 +78,9 @@ def assign_movies_view(request):
                         movie = Movie.objects.get(movie_id=movie_id)
                         movie.movie_user = movie_user
                         movie.save()
-        else:
-            print('reset')
-            reset_movies()
-            formset = AssignMovieFormSet()
+            else:
+                reset_movies()
+                formset = AssignMovieFormSet()
     else:
         formset = AssignMovieFormSet()
 
