@@ -1,7 +1,9 @@
 $(document).ready(function () {
     var table = $('#movie_user_table');
     var tableOptions = {
-        'bPaginate': false
+        'bPaginate': false,
+        'bStateSave': true,
+        'bStateDuration':-1
     };
     table.DataTable(tableOptions);
 
