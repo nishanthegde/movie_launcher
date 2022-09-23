@@ -11,6 +11,18 @@ class Csv(models.Model):
         return f"File: {self.file_name}"
 
 
+class Profile(models.Model):
+    PROFILE_LEVEL_CHOICES = [
+        ('ADVANCED', 'Advanced'),
+        ('INTERMEDIATE', 'Intermediate'),
+        ('BEGINNER', 'Beginner'),
+    ]
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    profile_level = models.CharField(max_length=100
+                                     , choices=PROFILE_LEVEL_CHOICES
+                                     , default='INTERMEDIATE')
+
+
 class Movie(models.Model):
     movie_id = models.CharField(max_length=100)
     movie_name = models.TextField()
